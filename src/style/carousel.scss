@@ -1,0 +1,8 @@
+.main-picture{
+    height: 50vh;
+    width: 50vw;
+    border: 2px solid orangered;
+    background: hsl(0, 0, 75, 0.75);
+    display: grid;
+    place-content: center;
+}

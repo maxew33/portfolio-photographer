@@ -1,0 +1,8 @@
+.main-picture {
+  height: 50vh;
+  width: 50vw;
+  border: 2px solid orangered;
+  background: rgba(191, 191, 191, 0.75);
+  display: grid;
+  place-content: center;
+}/*# sourceMappingURL=carousel.css.map */
