@@ -8,7 +8,7 @@ export default function Carousel(props) {
     return (
         <>
             <div className="main-picture">
-                {props.id}
+                <img src={props.imgUrl}/>
             </div>
             <InfiniteScroll />
         </>

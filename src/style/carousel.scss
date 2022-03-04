@@ -5,4 +5,10 @@
     background: hsl(0, 0, 75, 0.75);
     display: grid;
     place-content: center;
+
+    img{
+        height: 50vh;
+        width: 50vw;
+        object-fit: cover;
+    }
 }

@@ -5,4 +5,10 @@
   background: rgba(191, 191, 191, 0.75);
   display: grid;
   place-content: center;
+}
+.main-picture img {
+  height: 50vh;
+  width: 50vw;
+  -o-object-fit: cover;
+     object-fit: cover;
 }/*# sourceMappingURL=carousel.css.map */

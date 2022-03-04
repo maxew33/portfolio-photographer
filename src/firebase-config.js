@@ -1,5 +1,8 @@
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth"
+import { initializeApp } from "firebase/app"
+// import { getAuth } from "firebase/auth"
+import { getStorage } from "firebase/storage"
+import { getDatabase } from "firebase/database"
+
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -11,5 +14,15 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app)
+const firebaseApp = initializeApp(firebaseConfig)
+// Get a reference to the storage service, which is used to create references in your storage bucket
+export const database = getDatabase(firebaseApp)
+export const storage = getStorage(firebaseApp)
+
+// export const auth = getAuth(firebaseApp)
+
+
+// export  {
+//   storage, firebase as default
+// }
+
