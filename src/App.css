@@ -2,4 +2,8 @@ body {
   background: #222;
   color: #ddd;
   font-family: arial;
+}
+
+.App {
+  display: flex;
 }/*# sourceMappingURL=app.css.map */
