@@ -15,8 +15,9 @@ function App() {
   const [gallery, setGallery] = useState(1)
   const [folderNum, setFolderNum] = useState(1)
   const [imgUrl, setImgUrl] = useState('')
-  const [info, setInfo] = useState([])
-  const [galleries, setGalleries] = useState([])
+  const [galleries, setGalleries] = useState([{ name: "" }])
+  const [galleriesContent, setGalleriesContent] = useState([])
+  const [info, setInfo] = useState({ name: "", mail: "", about: "" })
 
   // creation of the firebase storage reference
   // const storage = getStorage()
@@ -52,14 +53,15 @@ function App() {
 
     // call the database
 
-    //collection reference
+    //gallery collection reference
     // const colRef = collection(db, 'gallery', '9boA73JaCrjucppsPO8K', 'gallery_1')
-    const colRef = collection(db, 'gallery')
+    const galleryRef = collection(db, 'gallery')
 
-    //get collection data
-    getDocs(colRef)
+    //get gallery collection data
+    getDocs(galleryRef)
       .then((snapshot) => {
         let newGalleries = []
+
         snapshot.docs.forEach((elt) => {
           newGalleries.push({ ...elt.data(), id: elt.id })
         })
@@ -67,13 +69,57 @@ function App() {
       })
       .catch(err => console.error(err))
 
-      
-    console.log(galleries)
+
+    //infos collection reference
+    const infoRef = collection(db, 'info')
+
+    //get info collection data
+    getDocs(infoRef)
+      .then((snapshot) => {
+        let newInfos = []
+        snapshot.docs.forEach((info) => {
+
+          newInfos.push({ ...info.data(), id: info.id })
+        })
+        setInfo(newInfos[0])
+      })
+      .catch(err => console.error(err))
+
   },
     [])
 
+  useEffect(() => {
+
+    // Once my galleries are loaded, I get the content of each one
+    if (galleries[0].name) {
+
+      const newGalleriesContent = []
+
+      galleries.map(gal => {
+        const galleryContentRef = collection(db, gal.id)
+        const myGalleryContent = []
+        //get gallery collection data
+        getDocs(galleryContentRef)
+          .then((snapshot) => {
+            snapshot.docs.forEach((elt) => {
+              console.log(gal.id, { ...elt.data(), id: elt.id })
+              myGalleryContent.push({ ...elt.data(), id: elt.id })
+            })
+          })
+          .catch(err => console.error(err))
+
+          newGalleriesContent.push(myGalleryContent)
+      })
+
+      setGalleriesContent(newGalleriesContent)
+
+    }
+
+  }, [galleries])
 
   useEffect(() => {
+console.log('content: ',galleriesContent)
+
     //point to the folder
     folderRef = storageRef(myStorageRef, folder)
 
@@ -82,14 +128,11 @@ function App() {
 
     getDownloadURL(imgRef)
       .then((url) => {
-        console.log(url)
         setImgUrl(url)
       })
       .catch((error) => {
         console.error(error)
       });
-
-      console.log(galleries[gallery-1])
 
   },
     [gallery])
@@ -100,17 +143,16 @@ function App() {
     newId < 1 && (newId = folderNum)
     newId > folderNum && (newId = 1)
     setGallery(newId)
-    console.log('arrow clicked qty = ', folderNum)
   }
 
   return (
     <div className="App">
-      <Banner />
+      <Banner name={info.name} />
       <button className="arrow"
         onClick={() => handleClickArrow(-1)}>
         left arrow
       </button>
-      <Carousel imgUrl={imgUrl} name={galleries[gallery-1].name} />
+      <Carousel imgUrl={imgUrl} name={galleries[gallery - 1].name} />
       <button className="arrow"
         onClick={() => handleClickArrow(1)}>
         right arrow

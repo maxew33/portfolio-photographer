@@ -4,7 +4,7 @@ import { faFlickr } from '@fortawesome/free-brands-svg-icons'
 
 import '../style/banner.css'
 
-export default function Banner() {
+export default function Banner(props) {
 
     const handleClickBurger = () => {
     }
@@ -13,7 +13,7 @@ export default function Banner() {
         <>
             <div className="banner-wrapper">
                 <div onClick={handleClickBurger}>burger</div>
-                <div>Benedict Priam</div>
+                <div>{props.name}</div>
                 <div>
                     <FontAwesomeIcon icon={faFlickr} />
                 </div>
