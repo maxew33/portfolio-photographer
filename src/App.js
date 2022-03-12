@@ -29,6 +29,28 @@ function App() {
   let img = 'gallery_' + gallery + '01.jpg'
   let imgRef
 
+  const fillMyGallerie = () => {
+    const newGalleriesContent = []
+
+    galleries.map(gal => {
+      const galleryContentRef = collection(db, gal.id)
+      const myGalleryContent = []
+      //get gallery collection data
+      getDocs(galleryContentRef)
+        .then((snapshot) => {
+          snapshot.docs.forEach((elt) => {
+            console.log(gal.id, { ...elt.data(), id: elt.id })
+            myGalleryContent.push({ ...elt.data(), id: elt.id })
+          })
+        })
+        .catch(err => console.error(err))
+
+      newGalleriesContent.push(myGalleryContent)
+    })
+
+    setGalleriesContent(newGalleriesContent)
+  }
+
   useEffect(() => {
 
     // call the storage
@@ -59,13 +81,14 @@ function App() {
 
     //get gallery collection data
     getDocs(galleryRef)
-      .then((snapshot) => {
+      .then(async (snapshot) => {
         let newGalleries = []
 
         snapshot.docs.forEach((elt) => {
           newGalleries.push({ ...elt.data(), id: elt.id })
         })
         setGalleries(newGalleries)
+        await (fillMyGallerie())
       })
       .catch(err => console.error(err))
 
@@ -89,36 +112,7 @@ function App() {
     [])
 
   useEffect(() => {
-
-    // Once my galleries are loaded, I get the content of each one
-    if (galleries[0].name) {
-
-      const newGalleriesContent = []
-
-      galleries.map(gal => {
-        const galleryContentRef = collection(db, gal.id)
-        const myGalleryContent = []
-        //get gallery collection data
-        getDocs(galleryContentRef)
-          .then((snapshot) => {
-            snapshot.docs.forEach((elt) => {
-              console.log(gal.id, { ...elt.data(), id: elt.id })
-              myGalleryContent.push({ ...elt.data(), id: elt.id })
-            })
-          })
-          .catch(err => console.error(err))
-
-          newGalleriesContent.push(myGalleryContent)
-      })
-
-      setGalleriesContent(newGalleriesContent)
-
-    }
-
-  }, [galleries])
-
-  useEffect(() => {
-console.log('content: ',galleriesContent)
+    console.log('content: ', galleriesContent)
 
     //point to the folder
     folderRef = storageRef(myStorageRef, folder)
