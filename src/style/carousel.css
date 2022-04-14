@@ -2,7 +2,7 @@
   height: 50vh;
   width: 50vw;
   border: 2px solid orangered;
-  background: rgba(191, 191, 191, 0.75);
+  background: hsla(0deg, 0%, 75%, 0.75);
   display: grid;
   place-content: center;
 }

@@ -6,4 +6,15 @@ body {
 
 .App {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.admin-toggle {
+  position: absolute;
+  top: 5vh;
+  right: 5vw;
+  z-index: 100;
+  cursor: pointer;
 }/*# sourceMappingURL=app.css.map */

@@ -1,0 +1,15 @@
+.admin {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background: #222;
+}
+
+.gallery-index {
+  padding: 25px 0;
+}
+.gallery-index div {
+  padding-left: 12.5px;
+}/*# sourceMappingURL=administration.css.map */
