@@ -14,3 +14,13 @@
         padding-left: 12.5px;
     }
 }
+
+.content{
+    height: auto;
+    transition: height .25s ease-in-out;
+    overflow: hidden;
+}
+
+.content-hidden{
+    height : 0;
+}

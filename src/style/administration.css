@@ -12,4 +12,14 @@
 }
 .gallery-index div {
   padding-left: 12.5px;
+}
+
+.content {
+  height: auto;
+  transition: height 0.25s ease-in-out;
+  overflow: hidden;
+}
+
+.content-hidden {
+  height: 0;
 }/*# sourceMappingURL=administration.css.map */

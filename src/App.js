@@ -30,7 +30,10 @@ function App() {
   let img = 'gallery_' + galleryDisplayed + '01.jpg'
   let imgRef
 
-  const getImgUrl = (gallerieId, idx) => {return(gallerieId + idx)}
+  const getImgUrl = (gallerieId, idx) => { return (gallerieId + idx) }
+
+  //gallery collection reference
+  const galleryRef = collection(db, 'gallery')
 
   const fillMyGallerie = (gallerieId, index) => {
     const galleryContentRef = collection(db, gallerieId)
@@ -40,11 +43,11 @@ function App() {
     getDocs(galleryContentRef)
       .then((snapshot) => {
         console.log(index, gallerieId)
-        snapshot.docs.forEach((elt, idx) => myGalleryContent.push({ ...elt.data(), id: elt.id, url: getImgUrl(gallerieId, idx+1) }))
+        snapshot.docs.forEach((elt, idx) => myGalleryContent.push({ ...elt.data(), id: elt.id, url: getImgUrl(gallerieId, idx + 1) }))
       })
       .catch(err => console.error(err))
-    
-      console.log(myGalleryContent)
+
+    console.log(myGalleryContent)
 
     return (myGalleryContent)
   }
@@ -72,9 +75,6 @@ function App() {
 
 
     // call the database
-
-    //gallery collection reference
-    const galleryRef = collection(db, 'gallery')
 
     //get gallery collection data
     getDocs(galleryRef)
