@@ -22,4 +22,8 @@
 
 .content-hidden {
   height: 0;
+}
+
+.suppr {
+  cursor: pointer;
 }/*# sourceMappingURL=administration.css.map */

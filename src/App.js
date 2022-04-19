@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { ref as storageRef, listAll, getDownloadURL } from 'firebase/storage'
+import { ref, listAll, getDownloadURL } from 'firebase/storage'
 import { collection, getDocs } from "firebase/firestore";
 
 import { storage, db } from './firebase-config'
@@ -17,12 +17,12 @@ function App() {
   const [folderNum, setFolderNum] = useState(1)
   const [imgUrl, setImgUrl] = useState('')
   const [galleries, setGalleries] = useState([{ name: "", id: "", content: [] }])
-  const [info, setInfo] = useState({ name: "", mail: "", about: "" })
+  // const [info, setInfo] = useState({ name: "", mail: "", about: "" })
   const [adminToggle, setAdminToggle] = useState(false)
 
   // creation of the firebase storage reference
   // const storage = getStorage()
-  const myStorageRef = storageRef(storage, 'gallery');
+  const myStorageRef = ref(storage, 'gallery');
 
   let folder = 'gallery_' + galleryDisplayed
   let folderRef
@@ -57,10 +57,10 @@ function App() {
     // call the storage
 
     //point to the folder
-    folderRef = storageRef(myStorageRef, folder)
+    folderRef = ref(myStorageRef, folder)
 
     //point to the image
-    imgRef = storageRef(storage, img)
+    imgRef = ref(storage, img)
 
     listAll(myStorageRef)
       .then((res) => {
@@ -89,17 +89,17 @@ function App() {
       })
       .catch(err => console.error(err.message))
 
-    //infos collection reference
-    const infoRef = collection(db, 'info')
+    // //infos collection reference
+    // const infoRef = collection(db, 'info')
 
-    //get info collection data
-    getDocs(infoRef)
-      .then(snapshot => {
-        let newInfos = []
-        snapshot.docs.forEach(info => newInfos.push({ ...info.data(), id: info.id }))
-        setInfo(newInfos[0])
-      })
-      .catch(err => console.error(err.message))
+    // //get info collection data
+    // getDocs(infoRef)
+    //   .then(snapshot => {
+    //     let newInfos = []
+    //     snapshot.docs.forEach(info => newInfos.push({ ...info.data(), id: info.id }))
+    //     setInfo(newInfos[0])
+    //   })
+    //   .catch(err => console.error(err.message))
   },
     [])
 
@@ -107,13 +107,16 @@ function App() {
     console.log('content: ', galleries[galleryDisplayed - 1].content)
 
     //point to the folder
-    folderRef = storageRef(myStorageRef, folder)
+    folderRef = ref(myStorageRef, folder)
 
     //point to the image
-    imgRef = storageRef(folderRef, img)
+    imgRef = ref(folderRef, img)
 
     getDownloadURL(imgRef)
-      .then(url => setImgUrl(url))
+      .then(url => {
+        console.log(url)
+        setImgUrl(url)
+      })
       .catch(error => console.error(error.message))
   },
     [galleryDisplayed])
@@ -132,7 +135,7 @@ function App() {
 
   return (
     <div className="App">
-      <Banner name={info.name} />
+      {/* <Banner name={info.name} /> */}
       <button className="arrow"
         onClick={() => handleClickArrow(-1)}>
         left arrow
