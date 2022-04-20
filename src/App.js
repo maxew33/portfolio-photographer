@@ -42,8 +42,9 @@ function App() {
     //get gallery collection data
     getDocs(galleryContentRef)
       .then((snapshot) => {
-        console.log(index, gallerieId)
-        snapshot.docs.forEach((elt, idx) => myGalleryContent.push({ ...elt.data(), id: elt.id, url: getImgUrl(gallerieId, idx + 1) }))
+        snapshot.docs.forEach((elt, idx) => {
+          myGalleryContent.push({ ...elt.data(), id: elt.id})
+        })
       })
       .catch(err => console.error(err))
 

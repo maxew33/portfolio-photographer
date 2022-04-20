@@ -1,15 +1,17 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 
 import {
     collection, addDoc,
     deleteDoc, doc
 } from 'firebase/firestore'
-import { ref, getDownloadURL } from 'firebase/storage'
-import { db } from '../firebase-config'
+import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage'
+import { db, storage } from '../firebase-config'
 
 import '../style/administration.css'
 
 export default function Administration({ galleries }) {
+
+    const [progress, setProgress] = useState(0)
 
     console.log(galleries)
 
@@ -20,16 +22,44 @@ export default function Administration({ galleries }) {
 
     const handleAdd = e => {
         e.preventDefault()
-        const ref = collection(db, e.target.dataset.id)
-        // addDoc(ref, {
-        //     name: e.target.children[0].value,
-        //     descr: e.target.children[1].value,
-        //     img: e.target.children[2].value
-        // })
-        //     .then(() => {
-        //         console.log('c est bon')
-        //         e.target.reset()
-        //     })
+
+        const dataToAdd = e.target
+
+        /* --- add the image to the store and get the url --- */
+        const file = dataToAdd[2].files[0]
+
+        console.log(file)
+
+        const storageRef = ref(storage, `gallery/${dataToAdd[0].value}-${Date.now()}`)
+
+        const uploadTask = uploadBytesResumable(storageRef, file)
+
+        uploadTask.on('state_changed', snapshot => {
+            const prog = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
+            setProgress(prog)
+        },
+            err => console.error(err),
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref)
+                    .then(url => addToTheDatabase(dataToAdd, url))
+            }
+        )
+
+        /* --- add the informations to the database --- */
+        const addToTheDatabase = (data, url) => {
+            const databaseRef = collection(db, data.dataset.id)
+
+            addDoc(databaseRef, {
+                name: data[0].value,
+                descr: data[1].value,
+                url: url
+            })
+                .then(() => {
+                    console.log('c est bon')
+                    data.reset()
+                })
+        }
+
         console.log(e.target[0].value, e.target.children[0].value, e.target[2].files[0])
     }
 
@@ -52,6 +82,9 @@ export default function Administration({ galleries }) {
             Administration
 
             <br />
+            progress : {progress} %
+
+            <br />
 
             <div className="check-my-galleries">
                 {galleries.map(gal => {
@@ -71,7 +104,7 @@ export default function Administration({ galleries }) {
                                             <br />
                                             {content.descr}<br />
                                             url à mettre dans une balise img : {content.url}
-                                            <br />
+                                            <br /><br /><br />
                                         </Fragment>
                                     )
                                 })}</div>
